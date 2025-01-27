@@ -29,12 +29,17 @@ Future<void> main() async {
   final themeJson_dark = jsonDecode(themeStr_dark);
   final theme_dark = ThemeDecoder.decodeThemeData(themeJson_dark)!;
 
-  runApp(MyApp(theme: theme));
+  runApp(MyApp(
+    theme: theme,
+    theme_dark: theme_dark,
+  ));
 }
 
 class MyApp extends StatelessWidget {
   final ThemeData theme;
-  const MyApp({Key? key, required this.theme}) : super(key: key);
+  final ThemeData theme_dark;
+  const MyApp({Key? key, required this.theme, required this.theme_dark})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +48,11 @@ class MyApp extends StatelessWidget {
         builder: (context, themeMode, _) {
           return MaterialApp(
             title: 'Gestion d\'albums',
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              useMaterial3: true,
-            ),
+            debugShowMaterialGrid: false,
+            debugShowCheckedModeBanner: false,
+            theme: theme,
+            darkTheme: theme_dark,
+            themeMode: themeMode,
             home: const MyHomePage(title: 'Gestion d\'albums Home Page'),
           );
         });
@@ -79,28 +85,47 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Theme.of(context).colorScheme.primary,
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                // do something
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.more_vert),
+              icon: const Icon(Icons.lightbulb),
               onPressed: () {
                 ThemeController().toggleTheme();
               },
             ),
           ]),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        child: ListView(
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Row(
+                  children: <Widget>[
+                    Image.asset('img/imgAccueil/vinyl2.jpg',
+                        width: 100, height: 100),
+                    Text(
+                      'Bienvenue sur l\'application de gestion des albums',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text(
+                  'News: Dernières actualités',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+            ),
+            Card(
+              child: Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Text(
+                  'Version 1 en cours de développement : Wait and see',
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
             ),
           ],
         ),
