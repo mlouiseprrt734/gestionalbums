@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:gestionalbums/AppBar/custom_icons_icons.dart';
+import 'package:gestionalbums/Pages/ListAlbums.dart';
+import 'package:gestionalbums/Pages/Settings.dart';
 import 'package:json_theme/json_theme.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'AppBar/appbar.dart';
-
-//controller pour le thème
-class ThemeController extends ValueNotifier<ThemeMode> {
-  ThemeController() : super(ThemeMode.light);
-
-  void toggleTheme() {
-    value = value == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-  }
-}
-
-final themeController = ThemeController();
+import 'Pages/Home.dart';
+import 'Theme/theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+//définition des thèmes et thème sombre
   final themeStr =
       await rootBundle.loadString('assets/appainter_theme_light.json');
   final themeJson = jsonDecode(themeStr);
@@ -68,14 +62,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  //int _counter = 0;
   int currentPageIndex = 0;
 
-  void _incrementCounter() {
+  /*void _incrementCounter() {
     setState(() {
       _counter++;
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -87,54 +81,28 @@ class _MyHomePageState extends State<MyHomePage> {
             IconButton(
               icon: const Icon(Icons.lightbulb),
               onPressed: () {
-                ThemeController().toggleTheme();
+                themeController.toggleTheme();
               },
             ),
           ]),
-      body: Container(
-        child: ListView(
-          children: <Widget>[
-            Card(
-              child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Row(
-                  children: <Widget>[
-                    Image.asset('img/imgAccueil/vinyl2.jpg',
-                        width: 100, height: 100),
-                    Text(
-                      'Bienvenue sur l\'application de gestion des albums',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Card(
-              child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text(
-                  'News: Dernières actualités',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-            ),
-            Card(
-              child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text(
-                  'Version 1 en cours de développement : Wait and see',
-                  style: TextStyle(fontSize: 15),
-                ),
-              ),
-            ),
-          ],
+      body: <Widget>[
+        // Page Home
+        Container(
+          child: homeP(),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+        // Page Liste Albums
+        Container(
+          color: Colors.white,
+          alignment: Alignment.center,
+          child: listAlbumP(),
+        ),
+        // Page Paramètres
+        Container(
+          color: Colors.white,
+          alignment: Alignment.center,
+          child: settingsP(),
+        ),
+      ][currentPageIndex],
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
@@ -144,16 +112,16 @@ class _MyHomePageState extends State<MyHomePage> {
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            icon: const Icon(CustomIcons.home),
+            icon: Icon(CustomIcons.home),
             label: "Home",
           ),
           NavigationDestination(
-            icon: const Icon(CustomIcons.queue_music),
+            icon: Icon(CustomIcons.queue_music),
             label: "Liste Albums",
           ),
           NavigationDestination(
             selectedIcon: Icon(Icons.bookmark),
-            icon: const Icon(CustomIcons.cog_alt),
+            icon: Icon(CustomIcons.cog_alt),
             label: "Paramètres",
           ),
         ],
