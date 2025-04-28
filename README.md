@@ -17,7 +17,7 @@ Cette application permet de gérer leur collection d'albums musicaux avec les fo
 
 1. Cloner le dépôt :
 ```bash
-git clone https://github.com/[votre-nom]/gestionalbums.git
+git clone https://github.com/mlouiseprrt734/gestionalbums.git
 ```
 
 2. Installer les dépendances :
